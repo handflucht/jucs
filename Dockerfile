@@ -40,6 +40,10 @@ ENV PY3PATH=/home/condauser/anaconda3/bin
 # Install the python2 ipython kernel
 #RUN $PY2PATH/python $PY2PATH/ipython kernelspec install-self
 
+# mono
+apt-get install -y mono-complete
+
+
 # Setup our environment for running the ipython notebook
 # Setting user here makes sure ipython notebook is run as user, not root
 EXPOSE 8888
