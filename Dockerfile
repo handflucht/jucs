@@ -16,6 +16,15 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 		gfortran \
 	&& apt-get clean
 
+# mono
+# RUN apt-get install -y mono-complete     (debian repositories do not contain latest mono)
+RUN echo 'deb http://download.opensuse.org/repositories/home:/tpokorra:/mono/Debian_8.0/ /' >> /etc/apt/sources.list.d/mono-opt.list 
+RUN wget http://download.opensuse.org/repositories/home:tpokorra:mono/Debian_8.0/Release.key
+RUN apt-key add - < Release.key  
+RUN apt-get update
+RUN apt-get install mono-opt
+
+
 # Create conda user, get anaconda by web or locally
 RUN useradd --create-home --home-dir /home/condauser --shell /bin/bash condauser
 RUN /tmp/get_anaconda.sh
@@ -40,13 +49,7 @@ ENV PY3PATH=/home/condauser/anaconda3/bin
 # Install the python2 ipython kernel
 #RUN $PY2PATH/python $PY2PATH/ipython kernelspec install-self
 
-# mono
-# RUN apt-get install -y mono-complete     (debian repositories do not contain latest mono)
-RUN echo 'deb http://download.opensuse.org/repositories/home:/tpokorra:/mono/Debian_8.0/ /' >> /etc/apt/sources.list.d/mono-opt.list 
-RUN wget http://download.opensuse.org/repositories/home:tpokorra:mono/Debian_8.0/Release.key
-RUN apt-key add - < Release.key  
-RUN apt-get update
-RUN apt-get install mono-opt
+
 
 # Setup our environment for running the ipython notebook
 # Setting user here makes sure ipython notebook is run as user, not root
