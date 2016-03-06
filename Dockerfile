@@ -41,7 +41,7 @@ ENV PY3PATH=/home/condauser/anaconda3/bin
 #RUN $PY2PATH/python $PY2PATH/ipython kernelspec install-self
 
 # mono
-apt-get install -y mono-complete
+RUN apt-get install -y mono-complete
 
 
 # Setup our environment for running the ipython notebook
