@@ -51,8 +51,8 @@ ENV PY3PATH=/home/condauser/anaconda3/bin
 # Install the python2 ipython kernel
 #RUN $PY2PATH/python $PY2PATH/ipython kernelspec install-self
 RUN cd /home/condauser/
-RUN chmod +x /tmp/install_icsharp_awb.sh \
-    && /tmp/install_icsharp_awb.sh
+# RUN chmod +x /tmp/install_icsharp_awb.sh \
+  #  && /tmp/install_icsharp_awb.sh
 
 
 
