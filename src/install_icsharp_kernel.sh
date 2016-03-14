@@ -1,2 +1,2 @@
-mv /tmp/kernel.json /home/condauser/icsharp
-jupyter kernelspec install /home/condauser/icsharp
+mkdir  /usr/local/share/jupyter/icsharp
+mv /tmp/kernel.json /usr/local/share/jupyter/icsharp
