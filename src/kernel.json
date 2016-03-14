@@ -1,5 +1,5 @@
 {
- "argv": [ "mono", "/tmp/icsharp/Kernel/bin/Release/iCSharp.Kernel.exe", "{connection_file}" ],
+ "argv": [ "mono", "/home/condauser/icsharp/Kernel/bin/Release/iCSharp.Kernel.exe", "{connection_file}" ],
  "display_name": "csharp",
  "language": "csharp"
 }
