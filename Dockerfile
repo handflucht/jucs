@@ -51,13 +51,8 @@ ENV PY3PATH=/home/condauser/anaconda3/bin
 # Install the python2 ipython kernel
 #RUN $PY2PATH/python $PY2PATH/ipython kernelspec install-self
 RUN cd /home/condauser/
-RUN git clone --recursive https://github.com/awb99/icsharp.git
-# RUN cd icsharp/Engine
-# RUN git checkout master
-# RUN update git pull
-# RUN ./build.sh
-# RUN cd ..
-# RUN xbuild ./iCSharp.sln /property:Configuration=Release /nologo /verbosity:normal
+RUN /tmp/install_icsharp_awb.sh
+
 
 
 
