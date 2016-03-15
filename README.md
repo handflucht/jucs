@@ -1,5 +1,5 @@
 # ICSharp Kernel notebook 
-##(forked from Anaconda-Notebook, so includes also python3 kernel)
+## forked from Anaconda-Notebook, so includes also python3 kernel
 
 Goal: Run C# kernel in ipython/jupyter in a fresh docker image.
 
