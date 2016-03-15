@@ -54,7 +54,9 @@ RUN cd /home/condauser/
 # RUN chmod +x /tmp/install_icsharp_awb.sh \
   #  && /tmp/install_icsharp_awb.sh
 
-
+# install icsharp kernel into ipython/jupyter
+RUN chmod +x /tmp/install_icsharp_kernel.sh \
+    && /tmp/install_icsharp_kernel.sh
 
 
 # Setup our environment for running the ipython notebook
