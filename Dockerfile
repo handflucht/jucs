@@ -50,20 +50,22 @@ ENV PY3PATH=/home/condauser/anaconda3/bin
 
 # Install the python2 ipython kernel
 #RUN $PY2PATH/python $PY2PATH/ipython kernelspec install-self
-RUN cd /home/condauser/
-# RUN chmod +x /tmp/install_icsharp_awb.sh \
-  #  && /tmp/install_icsharp_awb.sh
 
+# scripts to download/install and to build icsharp (the awb fork)
 
 RUN cp /tmp/build_icsharp_awb.sh /home/condauser/  \
     && chmod +x /home/condauser/build_icsharp_kernel.sh \
     && cp /tmp/install_icsharp_awb.sh /home/condauser/  \
     && chmod +x /home/condauser/install_icsharp_kernel.sh \
 
+RUN cd /home/condauser/
+# RUN chmod +x /tmp/install_icsharp_awb.sh \
+  #  && /tmp/install_icsharp_awb.sh
 
 # install icsharp kernel into ipython/jupyter
-RUN chmod +x /tmp/install_icsharp_kernel.sh \
-    && /tmp/install_icsharp_kernel.sh
+RUN cp /tmp/install_icsharp_kernel.sh /home/condauser/  \
+    chmod +x /home/condauser/install_icsharp_kernel.sh \
+    && /home/condauser/install_icsharp_kernel.sh
 
 
 # Setup our environment for running the ipython notebook
