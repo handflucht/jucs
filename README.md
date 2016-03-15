@@ -33,6 +33,11 @@ code is in /home/condauser
 
 The docker image uses a forked version of scriptcs and of icsharp which was necessary so that it would compile/run with the latest mono+scriptcs version.
 
+In case mono is not found the execute this script to set the environment variables
+```
+/opt/mono/env.sh
+```
+
 ```
 docker run -i -t -p 8888:8888 -v \
 <path to your ipython notebooks on host>:/home/condauser/notebooks rothnic/anaconda-notebook \
