@@ -23,8 +23,8 @@ RUN apt-get install mono-opt
 RUN /opt/mono/env.sh
 
 
-
 # Create conda user, get anaconda by web or locally
+ADD src/ /tmp
 RUN useradd --create-home --home-dir /home/condauser --shell /bin/bash condauser
 RUN /tmp/get_anaconda.sh
 
@@ -50,7 +50,7 @@ ENV PY3PATH=/home/condauser/anaconda3/bin
 
 
 # Link in our build files to the docker image
-ADD src/ /tmp
+ADD csharp/ /tmp
 
 # scripts to download/install and to build icsharp (the awb fork)
 
