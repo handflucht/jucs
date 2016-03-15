@@ -54,17 +54,19 @@ ADD csharp/ /tmp
 
 # scripts to download/install and to build icsharp (the awb fork)
 
-RUN cp /tmp/build_icsharp_awb.sh /home/condauser/  \
+RUN cp /tmp/install_icsharp_awb.sh /home/condauser/  \
+    && chmod +x /home/condauser/install_icsharp_awb.sh \
+    && /home/condauser/install_icsharp_awb.sh \
+    && cp /tmp/build_icsharp_awb.sh /home/condauser/  \
     && chmod +x /home/condauser/build_icsharp_awb.sh \
-    && cp /tmp/install_icsharp_awb.sh /home/condauser/  \
-    && chmod +x /home/condauser/install_icsharp_awb.sh 
+    && /home/condaauser/build_icsharp_awb.sh
 
 RUN cd /home/condauser/
 
 # install icsharp kernel into ipython/jupyter
 RUN cp /tmp/install_icsharp_kernel.sh /home/condauser/  \
     && chmod +x /home/condauser/install_icsharp_kernel.sh 
-#    && /home/condauser/install_icsharp_kernel.sh
+    && /home/condauser/install_icsharp_kernel.sh
 
 
 # Setup our environment for running the ipython notebook
