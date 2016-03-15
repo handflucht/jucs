@@ -65,7 +65,7 @@ RUN cd /home/condauser/
 
 # install icsharp kernel into ipython/jupyter
 RUN cp /tmp/install_icsharp_kernel.sh /home/condauser/  \
-    && chmod +x /home/condauser/install_icsharp_kernel.sh 
+    && chmod +x /home/condauser/install_icsharp_kernel.sh \
     && /home/condauser/install_icsharp_kernel.sh
 
 
