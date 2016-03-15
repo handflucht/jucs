@@ -56,15 +56,13 @@ ENV PY3PATH=/home/condauser/anaconda3/bin
 RUN cp /tmp/build_icsharp_awb.sh /home/condauser/  \
     && chmod +x /home/condauser/build_icsharp_awb.sh \
     && cp /tmp/install_icsharp_awb.sh /home/condauser/  \
-    && chmod +x /home/condauser/install_icsharp_awb.sh \
+    && chmod +x /home/condauser/install_icsharp_awb.sh 
 
 RUN cd /home/condauser/
-# RUN chmod +x /tmp/install_icsharp_awb.sh \
-  #  && /tmp/install_icsharp_awb.sh
 
 # install icsharp kernel into ipython/jupyter
 RUN cp /tmp/install_icsharp_kernel.sh /home/condauser/  \
-    chmod +x /home/condauser/install_icsharp_kernel.sh \
+    && chmod +x /home/condauser/install_icsharp_kernel.sh \
     && /home/condauser/install_icsharp_kernel.sh
 
 
