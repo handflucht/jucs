@@ -1,9 +1,6 @@
 FROM debian:jessie
 MAINTAINER Nick Roth "nlr06886@gmail.com"
 
-# Link in our build files to the docker image
-ADD src/ /tmp
-
 # Run all ubuntu updates and apt-get installs
 RUN export DEBIAN_FRONTEND=noninteractive && \
 	apt-get update && \
@@ -50,6 +47,10 @@ ENV PY3PATH=/home/condauser/anaconda3/bin
 
 # Install the python2 ipython kernel
 #RUN $PY2PATH/python $PY2PATH/ipython kernelspec install-self
+
+
+# Link in our build files to the docker image
+ADD src/ /tmp
 
 # scripts to download/install and to build icsharp (the awb fork)
 
