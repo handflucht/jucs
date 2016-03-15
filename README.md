@@ -51,15 +51,15 @@ docker build -t ic1 .  --no-cache=true
 # notes on forks of scriptcs and icsharp
 
 scriptcs:
-changed to common.logging 3.3
-changed one windows \\ path to Path combine in src/ScriptCs/Argument/ArgumentHandler.cs
-removed String.Format   (for some reason, only string.Format is available on mono)
-added a testproject app that will test if 13+7 equals to 20; a very simple test app required to be sure the engine works
-Roslyn engine does not yet work on mono (it throws directory related exceptions)
+* changed to common.logging 3.3
+* changed one windows \\ path to Path combine in src/ScriptCs/Argument/ArgumentHandler.cs
+* removed String.Format   (for some reason, only string.Format is available on mono)
+* added a testproject app that will test if 13+7 equals to 20; a very simple test app required to be sure the engine works
+* Roslyn engine does not yet work on mono (it throws directory related exceptions)
 
 icsharp:
-the subproject compile causes huge problems on mono. so addeda libICSharp folder that has precompiled binaries
-changed GetRepl in Kernel/ReplEngineFactory.cs to work with newser scriptcs version
+* the subproject compile causes huge problems on mono. so addeda libICSharp folder that has precompiled binaries
+* changed GetRepl in Kernel/ReplEngineFactory.cs to work with newser scriptcs version
 
 
 
