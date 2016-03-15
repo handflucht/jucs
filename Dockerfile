@@ -54,9 +54,9 @@ ENV PY3PATH=/home/condauser/anaconda3/bin
 # scripts to download/install and to build icsharp (the awb fork)
 
 RUN cp /tmp/build_icsharp_awb.sh /home/condauser/  \
-    && chmod +x /home/condauser/build_icsharp_kernel.sh \
+    && chmod +x /home/condauser/build_icsharp_awb.sh \
     && cp /tmp/install_icsharp_awb.sh /home/condauser/  \
-    && chmod +x /home/condauser/install_icsharp_kernel.sh \
+    && chmod +x /home/condauser/install_icsharp_awb.sh \
 
 RUN cd /home/condauser/
 # RUN chmod +x /tmp/install_icsharp_awb.sh \
