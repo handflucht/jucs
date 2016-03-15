@@ -8,7 +8,7 @@ I assume docker is already installed and running.
 To build the kernel:
 ```
 git clone https://github.com/awb99/anaconda-notebook.git
-docker build -t ic1 .  --no-cache=true
+docker build -t ic1 . 
 ```
 
 In case docker needs to be rebuild completely then run:
