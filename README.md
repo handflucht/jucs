@@ -5,15 +5,10 @@ Goal: Run C# kernel in ipython/jupyter easily via a docker image.
 
 I assume docker is already installed and running.
 
-To build the kernel:
+To build the docker image:  (ic1 is the name of the to be created docker image)
 ```
 git clone https://github.com/awb99/jupyter-icsharp-docker.git
 docker build -t ic1 . 
-```
-
-In case docker needs to be rebuild completely then run:
-```
-docker build -t ic1 .  --no-cache=true
 ```
 
 
@@ -43,4 +38,9 @@ docker run -i -t -p 8888:8888 -v \
 <path to your ipython notebooks on host>:/home/condauser/notebooks rothnic/anaconda-notebook \
 /home/condauser/anaconda3/bin/ipython notebook
 ```
+In case docker needs to be rebuild completely then run:
+```
+docker build -t ic1 .  --no-cache=true
+```
+
 
