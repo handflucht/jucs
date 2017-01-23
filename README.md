@@ -1,37 +1,37 @@
-# Jupyter ICSharp Kernel - Docker image 
-## forked from Anaconda-Notebook, so includes also python3 kernel
+# jupyter ICSharp Kernel - Docker image
+## forked from Jupyter ICSharp Kernel (https://github.com/awb99/jupyter-icsharp-docker)
 
 Goal: Run C# kernel in ipython/jupyter easily via a docker image.
 
 I assume docker is already installed and running.
 
-To build the docker image:  (ic1 is the name of the to be created docker image)
+
+# Build image
 ```
-git clone https://github.com/awb99/jupyter-icsharp-docker.git
-docker build -t ic1 . 
+git clone https://github.com/handflucht/jupyter-icsharp-docker
+cd jupyter-icsharp-docker/
+docker build -t jupc_original .
 ```
 
-Run docker image (will start Jupyter/C# kernel)
-/tmp/notebooks needs to be changed the path of the host machine into which notebooks will be saved
-
+# Run docker image (will start Jupyter/C# kernel)
 ```
-docker run -i -t -p 8888:8888 -v \
-/tmp/notebooks:/home/condauser/notebooks ic1 \
-/home/condauser/anaconda3/bin/ipython notebook --profile=icsharp --Session.key='' --Session.keyfile=''
+docker run -i -t -p 8888:8888 jupc_bash jupyter notebook --Session.key="b''" 
 ```
 
+# Run docker image and start kernel manual
+For some reasons, the kernel crashes if you start it like the above line. if you start it from inside the container, it works:
 
-# notes to develop the docker image more:
-
-Run a terminal in the docker image (with CTRL D can exit)
+Start container with bash
 ```
-docker run -t -i ic1 /bin/bash        
+docker run -it --name jupc_bash -p 8888:8888 jupc_original /bin/bash
 ```
 
-run ipython:  (change to the path where the notebooks are first)
+run in new bash (inside container:)
 ```
-ipython notebook --profile=icsharp --Session.key='' --Session.keyfile=''    
+jupyter notebook --Session.key="b''"
+
 ```
+# Notes
 
 code is in /home/condauser
 
@@ -45,7 +45,7 @@ In case mono is not found the execute this script to set the environment variabl
 
 In case docker needs to be rebuild completely then run:
 ```
-docker build -t ic1 .  --no-cache=true
+docker build -t ic1 . --no-cache=true
 ```
 
 # notes on forks of scriptcs and icsharp
@@ -53,18 +53,8 @@ docker build -t ic1 .  --no-cache=true
 scriptcs:
 * changed to common.logging 3.3
 * changed one windows \\ path to Path combine in src/ScriptCs/Argument/ArgumentHandler.cs
-* removed String.Format   (for some reason, only string.Format is available on mono)
+* removed String.Format (for some reason, only string.Format is available on mono)
 * added a testproject app that will test if 13+7 equals to 20; a very simple test app required to be sure the engine works
+
 * Roslyn engine does not yet work on mono (it throws directory related exceptions)
-
-icsharp:
-* the subproject compile causes huge problems on mono. so addeda libICSharp folder that has precompiled binaries
-* changed GetRepl in Kernel/ReplEngineFactory.cs to work with newser scriptcs version
-
-
-
-
-
-
-
-
+README.md

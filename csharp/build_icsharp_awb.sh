@@ -4,5 +4,5 @@ mozroots --import --sync
  
 cd /home/condauser/icsharp 
 mkdir /home/condauser/icsharp/packages 
-mono ./.nuget/NuGet.exe restore ./icSharp.sln 
+mono ./.nuget/NuGet.exe restore ./iCSharp.sln 
 xbuild ./iCSharp.sln /property:Configuration=Release /nologo /verbosity:normal
