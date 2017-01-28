@@ -1,6 +1,7 @@
 FROM debian:jessie
-MAINTAINER Nick Roth "nlr06886@gmail.com"
+MAINTAINER handflucht "handflucht@gmail.com"
 
+# Add external data to this directory
 ARG TMP_DIR=/tmp/docker-build-mount
 
 RUN export DEBIAN_FRONTEND=noninteractive
@@ -8,17 +9,18 @@ RUN export DEBIAN_FRONTEND=noninteractive
 # Run all ubuntu updates and apt-get installs
 RUN apt-get update && \
 	apt-get upgrade -y && \
-	apt-get install -y wget bzip2 build-essential git && \
+	apt-get install -y wget nano bzip2 && \
 	apt-get clean
 
-# mono (from debian user repositories; gets installedto /opt/mono/)
-# RUN apt-get install -y mono-complete     (debian repositories do not contain latest mono)
-RUN echo 'deb http://download.opensuse.org/repositories/home:/tpokorra:/mono/Debian_8.0/ /' >> /etc/apt/sources.list.d/mono-opt.list 
-RUN wget http://download.opensuse.org/repositories/home:tpokorra:mono/Debian_8.0/Release.key
-RUN apt-key add - < Release.key  
-RUN apt-get update
-RUN apt-get install mono-opt
-RUN /opt/mono/env.sh
+## Install latest mono otherwise you will have the following exception:
+## System.Net.Sockets.SocketException (0x80004005): Operating system sockets do not support ReuseAddress
+RUN apt-get -y install git autoconf libtool automake build-essential mono-devel gettext cmake
+RUN wget -q https://download.mono-project.com/sources/mono/mono-4.8.0.472.tar.bz2
+RUN tar xvf mono-4.8.0.472.tar.bz2
+RUN cd  mono-4.8.0; ./configure --prefix=/usr/local; make; make install
+	
+RUN mono --version
+RUN cert-sync /etc/ssl/certs/ca-certificates.crt
 
 # Create conda user
 RUN useradd --create-home --home-dir /home/condauser --shell /bin/bash condauser
@@ -33,49 +35,46 @@ RUN $TMP_DIR/get_anaconda.sh $TMP_DIR
 USER condauser
 RUN bash /home/condauser/Anaconda.sh -b
 
-# set path, so e.g. pip can be called later on
+# Set path, so e.g. pip can be called later on
 ENV PATH /home/condauser/anaconda3/bin:$PATH
 
-# upgrade pip to get rid of warning-message
+# Upgrade pip to get rid of warning-message
 RUN pip install --upgrade pip
 
-# Install notebooks, config and set python3-path
-RUN $TMP_DIR/install.sh $TMP_DIR
-
 USER root
+
+# PDF-export for jupyter. Installation after python/pip-installation
+RUN apt-get install -y texlive texlive-latex-extra pandoc && \
+    pip install https://github.com/Anaconda-Server/nbbrowserpdf/archive/master.zip && \
+    python -m nbbrowserpdf.install --enable
+
+# Install notebooks, config and set python3-path
+RUN $TMP_DIR/config_jupyter.sh $TMP_DIR
 
 # Create directory and place matplot-startup-script in it
 RUN mkdir -p /home/condauser/.ipython/profile_default/startup && \
     cp $TMP_DIR/matplotlib_nb_init.py /home/condauser/.ipython/profile_default/startup 
 
-# chown only this directory. chown whole user-folder will take > 10min on Windows
-RUN chown condauser:condauser /home/condauser/.ipython -R
+# Chown only these directories. Chown whole user-folder will take > 15min on Windows
+RUN chown condauser:condauser /home/condauser/.ipython /home/condauser/.jupyter /home/condauser/jupyterbooks -R
 
-# make pdf-export possible
-RUN apt-get install -y texlive texlive-latex-extra pandoc && \
-    pip install https://github.com/Anaconda-Server/nbbrowserpdf/archive/master.zip && \
-    python -m nbbrowserpdf.install --enable
+# Script to download icsharp
+RUN cp $TMP_DIR/get_icsharp.sh /home/condauser/ && \
+    chmod +x /home/condauser/get_icsharp.sh && \
+    /home/condauser/get_icsharp.sh $TMP_DIR 
+	
+# Build icsharp. Use the brew-script for ScriptCS, otherwise it will fail on Debian
+RUN cd /home/condauser/icsharp/; /home/condauser/icsharp/build.sh brew
+	
+# Corecctly link and install icsharp
+RUN sed  -i 's:"<INSTALL_PATH>:"mono", "/home/condauser:g' /home/condauser/icsharp/kernel-spec/kernel.json
 
-# Link in our build files to the docker image
-ADD csharp/ $TMP_DIR
-
-# scripts to download/install and to build icsharp (the awb fork)
-RUN cp $TMP_DIR/install_icsharp_awb.sh /home/condauser/ && \
-    chmod +x /home/condauser/install_icsharp_awb.sh && \
-    /home/condauser/install_icsharp_awb.sh $TMP_DIR && \
-    cp $TMP_DIR/build_icsharp_awb.sh /home/condauser/ && \
-    chmod +x /home/condauser/build_icsharp_awb.sh && \
-    /home/condauser/build_icsharp_awb.sh
-
-# install icsharp kernel into ipython/jupyter
 RUN mkdir -p /usr/local/share/jupyter/kernels/icsharp && \
-    mv $TMP_DIR/kernel.json /usr/local/share/jupyter/kernels/icsharp && \
-    mv $TMP_DIR/logo-64x64.png /usr/local/share/jupyter/kernels/icsharp
+	cp /home/condauser/icsharp/kernel-spec/* /usr/local/share/jupyter/kernels/icsharp
 
-# delete all objects which where added to the container while building
-RUN rm /home/condauser/build_icsharp_awb.sh && \
-    rm /home/condauser/install_icsharp_awb.sh && \
-    rm -rf $TMP_DIR
+# Delete all objects which where added to the container while building
+RUN rm /home/condauser/get_icsharp.sh 
+RUN rm -rf $TMP_DIR
 
 # Setup our environment for running the ipython notebook
 # Setting user here makes sure ipython notebook is run as user, not root
@@ -86,4 +85,3 @@ ENV SHELL=/bin/bash
 ENV USER=condauser
 
 WORKDIR /home/condauser/jupyterbooks
-

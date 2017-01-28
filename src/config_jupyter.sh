@@ -18,4 +18,3 @@ cp $SRC_DIR/jupyter_notebook_config.py $HOME/.jupyter/jupyter_notebook_config.py
 # copy example notebook
 mkdir $HOME/jupyterbooks
 cp -a $SRC_DIR/notebooks/* $HOME/jupyterbooks/
-
