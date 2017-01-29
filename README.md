@@ -1,60 +1,66 @@
-# jupyter ICSharp Kernel - Docker image
-## forked from Jupyter ICSharp Kernel (https://github.com/awb99/jupyter-icsharp-docker)
+# Introduction
+This project runs Jupyter with an IC#/ICSharp-kernel in a docker image.
+The project forked from Jupyter ICSharp kernel (https://github.com/awb99/jupyter-icsharp-docker) but has been modified in many ways.
 
-Goal: Run C# kernel in ipython/jupyter easily via a docker image.
+# Goal
+Run Jupyter with a C#-kernel without any configuration needed.
 
-I assume docker is already installed and running.
+# Docker operations
+This chapter describes how to build and run the container in different ways.
 
+## Build docker image
+Prerequisites:
+* Docker is already installed
 
-# Build image
+Clone the repository start the docker build:
 ```
-git clone https://github.com/handflucht/jupyter-icsharp-docker
-cd jupyter-icsharp-docker/
-docker build -t jupc_original .
-```
-
-# Run docker image (will start Jupyter/C# kernel)
-```
-docker run -i -t -p 8888:8888 jupc_bash jupyter notebook --Session.key="b''" 
-```
-
-# Run docker image and start kernel manual
-For some reasons, the kernel crashes if you start it like the above line. if you start it from inside the container, it works:
-
-Start container with bash
-```
-docker run -it --name jupc_bash -p 8888:8888 jupc_original /bin/bash
+git clone https://github.com/handflucht/jucs
+cd jucs/
+docker build -t jucs .
 ```
 
-run in new bash (inside container:)
-```
-jupyter notebook --Session.key="b''"
+## About the docker image
+For those who are familiar with the `Dockerfile`-commands, here some information which are useful for understanding who to run the image:
 
 ```
+USER condauser
+ENV HOME=/home/condauser
+ENV SHELL=/bin/bash
+ENV USER=condauser
+```
+
+```
+EXPOSE 8888
+WORKDIR /home/condauser/jupyterbooks
+ENTRYPOINT ["/bin/sh", "-c"]
+CMD ["jupyter notebook"]
+```
+
+### Run docker image (will start Jupyter with CSharp kernel)
+```
+docker run -itp 8888:8888 jucs 
+```
+
+### Run docker image with shell
+```
+docker run -itp 8888:8888 jucs /bin/bash
+```
+
 # Notes
+If you need more information about this project, please read the following information:
 
-code is in /home/condauser
+* **Adding notebooks**
+ You can store notebooks in `src/notebooks` before build. These books will automatically be added during build and will be accessible after running the container.
 
-The docker image uses a forked version of scriptcs and of icsharp which was necessary so that it would compile/run with the latest mono+scriptcs version.
+* **Changing Anaconda version**
+ In `src/get_anaconda.sh` point the URL to the new location.
 
-In case mono is not found the execute this script to set the environment variables
-```
-/opt/mono/env.sh
-```
+* **Changing ICSharp-kernel version**
+ In `src/get_icsharp.sh` you can change the path to the repository which contains the data of the ICSharp-kernel. Just make sure the data is in a directory called `icsharp` after the checkout.
 
+* **Speeding up build**
+ You can place the `Anaconda`-installation-file at `src/Anaconda.sh` and the C#-kernel at `src/icsharp/`. If this file/directory exists while building, there are used and no data is downloaded. 
+This is very helpful while testing custom modifications or running many builds for other reasons.
 
-In case docker needs to be rebuild completely then run:
-```
-docker build -t ic1 . --no-cache=true
-```
-
-# notes on forks of scriptcs and icsharp
-
-scriptcs:
-* changed to common.logging 3.3
-* changed one windows \\ path to Path combine in src/ScriptCs/Argument/ArgumentHandler.cs
-* removed String.Format (for some reason, only string.Format is available on mono)
-* added a testproject app that will test if 13+7 equals to 20; a very simple test app required to be sure the engine works
-
-* Roslyn engine does not yet work on mono (it throws directory related exceptions)
-README.md
+* **In case docker needs to be rebuild completely then run:**
+ `docker build --no-cache=true -t jucs .`

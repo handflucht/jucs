@@ -78,10 +78,12 @@ RUN rm -rf $TMP_DIR
 
 # Setup our environment for running the ipython notebook
 # Setting user here makes sure ipython notebook is run as user, not root
-EXPOSE 8888
 USER condauser
 ENV HOME=/home/condauser
 ENV SHELL=/bin/bash
 ENV USER=condauser
 
+EXPOSE 8888
 WORKDIR /home/condauser/jupyterbooks
+ENTRYPOINT ["/bin/sh", "-c"]
+CMD ["jupyter notebook"]
