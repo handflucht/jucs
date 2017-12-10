@@ -1,7 +1,7 @@
 # Constants
 SRC_DIR=$1
 HOME=/home/condauser
-Anaconda3=https://repo.continuum.io/archive/Anaconda3-4.2.0-Linux-x86_64.sh
+Anaconda3=https://repo.continuum.io/archive/Anaconda3-5.0.1-Linux-x86_64.sh
 
 if [ ! -f $SRC_DIR/Anaconda.sh ];
 then
