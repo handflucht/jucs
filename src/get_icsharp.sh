@@ -5,10 +5,10 @@ cd /home/condauser/
 # If it doesn't exists, the repository gets cloned
 if [ ! -d "$SRC_DIR/icsharp" ]
 then
-	echo "icsharp-folder does not exist-> cloning"
+	echo "icsharp-folder does not exist -> cloning"
 	git clone --recursive https://github.com/handflucht/icsharp.git icsharp
 else
-	echo "icsharp-folder does exist-> move"
+	echo "icsharp-folder does exist -> move"
 	mv $SRC_DIR/icsharp ./
 fi
 
