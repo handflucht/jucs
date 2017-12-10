@@ -27,6 +27,7 @@ RUN useradd --create-home --home-dir /home/condauser --shell /bin/bash condauser
 
 # Make everything in src-directory accessible
 ADD src/ $TMP_DIR
+RUN chmod -R +x $TMP_DIR/
 
 # Get anaconda by web or locally
 RUN $TMP_DIR/get_anaconda.sh $TMP_DIR
@@ -49,8 +50,7 @@ RUN apt-get install -y texlive texlive-latex-extra pandoc && \
     python -m nbbrowserpdf.install --enable
 
 # Install notebooks, config and set python3-path
-RUN chmod +x $TMP_DIR/config_jupyter.sh && \
-		$TMP_DIR/config_jupyter.sh $TMP_DIR
+RUN $TMP_DIR/config_jupyter.sh $TMP_DIR
 
 # Create directory and place matplot-startup-script in it
 RUN mkdir -p /home/condauser/.ipython/profile_default/startup && \
@@ -61,7 +61,6 @@ RUN chown condauser:condauser /home/condauser/.ipython /home/condauser/.jupyter 
 
 # Script to download icsharp
 RUN cp $TMP_DIR/get_icsharp.sh /home/condauser/ && \
-    chmod +x /home/condauser/get_icsharp.sh && \
     /home/condauser/get_icsharp.sh $TMP_DIR
 
 # Build icsharp. Use the brew-script for ScriptCS, otherwise it will fail on Debian
