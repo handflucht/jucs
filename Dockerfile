@@ -18,7 +18,7 @@ RUN apt-get -y install git autoconf libtool automake build-essential mono-devel 
 RUN wget -q https://download.mono-project.com/sources/mono/mono-4.8.0.472.tar.bz2
 RUN tar xvf mono-4.8.0.472.tar.bz2
 RUN cd  mono-4.8.0; ./configure --prefix=/usr/local; make; make install
-	
+
 RUN mono --version
 RUN cert-sync /etc/ssl/certs/ca-certificates.crt
 
@@ -49,11 +49,12 @@ RUN apt-get install -y texlive texlive-latex-extra pandoc && \
     python -m nbbrowserpdf.install --enable
 
 # Install notebooks, config and set python3-path
-RUN $TMP_DIR/config_jupyter.sh $TMP_DIR
+RUN chmod +x $TMP_DIR/config_jupyter.sh && \
+		$TMP_DIR/config_jupyter.sh $TMP_DIR
 
 # Create directory and place matplot-startup-script in it
 RUN mkdir -p /home/condauser/.ipython/profile_default/startup && \
-    cp $TMP_DIR/matplotlib_nb_init.py /home/condauser/.ipython/profile_default/startup 
+    cp $TMP_DIR/matplotlib_nb_init.py /home/condauser/.ipython/profile_default/startup
 
 # Chown only these directories. Chown whole user-folder will take > 15min on Windows
 RUN chown condauser:condauser /home/condauser/.ipython /home/condauser/.jupyter /home/condauser/jupyterbooks -R
@@ -61,11 +62,11 @@ RUN chown condauser:condauser /home/condauser/.ipython /home/condauser/.jupyter 
 # Script to download icsharp
 RUN cp $TMP_DIR/get_icsharp.sh /home/condauser/ && \
     chmod +x /home/condauser/get_icsharp.sh && \
-    /home/condauser/get_icsharp.sh $TMP_DIR 
-	
+    /home/condauser/get_icsharp.sh $TMP_DIR
+
 # Build icsharp. Use the brew-script for ScriptCS, otherwise it will fail on Debian
 RUN cd /home/condauser/icsharp/; /home/condauser/icsharp/build.sh brew
-	
+
 # Corecctly link and install icsharp
 RUN sed  -i 's:"<INSTALL_PATH>:"mono", "/home/condauser:g' /home/condauser/icsharp/kernel-spec/kernel.json
 
@@ -73,7 +74,7 @@ RUN mkdir -p /usr/local/share/jupyter/kernels/icsharp && \
 	cp /home/condauser/icsharp/kernel-spec/* /usr/local/share/jupyter/kernels/icsharp
 
 # Delete all objects which where added to the container while building
-RUN rm /home/condauser/get_icsharp.sh 
+RUN rm /home/condauser/get_icsharp.sh
 RUN rm -rf $TMP_DIR
 
 # Setup our environment for running the ipython notebook
